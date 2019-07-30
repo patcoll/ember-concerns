@@ -1,0 +1,23 @@
+{
+  "name": "ember-concerns",
+  "description": "DRY up your Ember code without mixins",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Pat Collins"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patcoll/ember-concerns.git"
+  },
+  "bugs": {
+    "url": "https://github.com/patcoll/ember-concerns/issues"
+  },
+  "keywords": [
+    "ember-addon"
+  ],
+  "dependencies": {
+    "ember-bind-helper": "^1.0.0",
+    "ember-cli-babel": "^7.8.0"
+  }
+}
