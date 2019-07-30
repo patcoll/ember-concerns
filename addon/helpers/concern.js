@@ -2,6 +2,7 @@ import { getOwner } from '@ember/application';
 import { computed, setProperties } from '@ember/object';
 import Helper from '@ember/component/helper';
 import { assert } from '@ember/debug';
+const { keys } = Object;
 
 export default Helper.extend({
   init() {
@@ -28,12 +29,12 @@ export default Helper.extend({
 
   compute([name, model], props) {
     assert(
-      `A presenter must be a string but you passed ${typeof name}`,
+      `A concern must be a string but you passed ${typeof name}`,
       typeof name === 'string'
     );
 
     assert(
-      `A presenter must be an object but you passed ${typeof model}`,
+      `A concern must be an object but you passed ${typeof model}`,
       typeof model === 'object'
     );
 
@@ -45,5 +46,14 @@ export default Helper.extend({
     let { concern } = this;
 
     return concern;
+  },
+  
+  willDestroy() {
+    keys(this.concerns).forEach(key => {
+      let concern = this.concerns[key];
+      if (concern && concern.destroy) {
+        concern.destroy();
+      }
+    });
   }
 });
