@@ -1,6 +1,7 @@
 import EmberObject, { computed, get } from '@ember/object';
 import { getOwner } from '@ember/application';
 import { copy } from '@ember/object/internals';
+import { _cleanupOnDestroy } from 'ember-concerns/utils';
 const { assign } = Object;
 
 export function inject(name = null, options = {}) {
@@ -36,8 +37,9 @@ export function inject(name = null, options = {}) {
         model = get(this, options.model);
       }
 
-      let navigation = factory.create({ model });
-      return navigation;
+      let concern = factory.create({ model });
+      _cleanupOnDestroy(model, concern, 'destroy', 'the object it lives on was destroyed or unrendered');
+      return concern;
     }
   };
 
