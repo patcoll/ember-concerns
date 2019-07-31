@@ -106,7 +106,7 @@ Using the `concern-action` helper, the closure actions `close` and `open` are bo
 
 ### More JS API variations
 
-A concern can be injected into any Ember object. In this scenario, a concern acts as a sort of "view model" -- it takes an object as input and extends  That object is used as the concern's `model`, but the object doesn't have to be a model.
+A concern can be injected into any Ember object. That object is used as the concern's `model`, but the object doesn't have to be a model.
 
 ```js
 /**
@@ -114,26 +114,26 @@ A concern can be injected into any Ember object. In this scenario, a concern act
   * In this case the name of the variable can be used to look up the view model.
   * In this case the `model` passed in is assumed to be `this`.
   */
-dateControlNavigation: concern()
+projectActions: concern()
 
 /**
   * Explicitly supply path to view model.
   * In this case the `model` passed in is assumed to be `this`.
   */
-navigation: concern('date-control-navigation')
+actions: concern('project/actions')
 
 /**
   * If a variable name passed in, that variable is used as the model.
   * In this case the `model` passed in is explicitly set to be `anyVariable`.
   */
-navigation: concern('date-control-navigation', {
+actions: concern('project/actions', {
   model: 'anyVariable'
 })
 
 /**
   * Can also explicitly set properties that the behind-the-scenes computed property depends on:
   */
-navigation: concern('date-control-navigation', {
+actions: concern('project/actions', {
   dependsOn: ['anyVariable.prop1', 'anyVariable.prop2.{subPropA,subPropB}'],
   model: 'anyVariable'
 })
