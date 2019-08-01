@@ -38,7 +38,6 @@ export function inject(name = null, options = {}) {
       }
 
       let concern = factory.create({ model });
-      _cleanupOnDestroy(model, concern, 'destroy', 'the object it lives on was destroyed or unrendered');
       return concern;
     }
   };
@@ -49,6 +48,11 @@ export function inject(name = null, options = {}) {
   return computed(...computedArgs);
 }
 
-const Concern = EmberObject.extend();
+const Concern = EmberObject.extend({
+  init({ model }) {
+    this._super(...arguments);
+    _cleanupOnDestroy(model, this, 'destroy', 'the object it lives on was destroyed or unrendered');
+  }
+});
 
 export default Concern;
