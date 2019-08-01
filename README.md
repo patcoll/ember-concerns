@@ -14,6 +14,7 @@ With concerns, you can encapsulate related derived data together.
 
 *It's a great way to plan a transition away from using Ember controllers.* Encapsulate the data and logic you need to abstract away from the controller into a concern, then move that to a component later by simply moving where the concern is used.
 
+
 ### A basic example
 
 In its most basic form, a concern can act as a "view model" -- taking an object as input and extending it with computed properties that are appropriate for rendering a view. Think components that need to access the same derived data. If multiple components share the need for the same data, that concern can simply be used in multiple components. If you feel that data is more appropriate closer to the model layer, the concern can be moved to the model itself. In this scenario, the Ember Handlebars API makes this nice and decoupled.
