@@ -47,7 +47,7 @@ export default Helper.extend({
 
     return concern;
   },
-  
+
   willDestroy() {
     keys(this.concerns).forEach(key => {
       let concern = this.concerns[key];
