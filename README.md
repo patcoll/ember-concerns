@@ -1,4 +1,5 @@
 # `ember-concerns`
+[![Build Status](https://travis-ci.org/patcoll/ember-concerns.svg?branch=master)](https://travis-ci.org/patcoll/ember-concerns)
 
 DRY up your Ember code without mixins.
 
