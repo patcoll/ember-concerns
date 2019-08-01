@@ -24,6 +24,8 @@
 /tests/
 /yarn.lock
 .gitkeep
+*.sw[a-z]
+*.un~
 
 # ember-try
 /.node_modules.ember-try/
