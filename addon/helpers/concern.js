@@ -41,9 +41,11 @@ export default Helper.extend({
     this.name = name;
     this.model = model;
 
-    setProperties(this, { name, model }, props);
+    setProperties(this, { name, model });
 
     let { concern } = this;
+
+    setProperties(concern, props);
 
     return concern;
   },
