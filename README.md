@@ -103,7 +103,11 @@ export default Concern.extend({
 </div>
 ```
 
-Using the `concern-action` helper, the closure actions `close` and `open` are bound in scope to `projectActions`. This gives the most flexibility, since the concern has access to (1) the component object (`model`), (2) the project model (`model.project`), and (3) any other data or logic on the concern it needs. Only using the `action` helper would scope the functions to the component itself, which would likely be unexpected and lead to lack of access to pertinent data.
+#### `concern-action`
+
+Concerns are designed to encapsulate related functionality. Using the `concern-action` helper, the closure actions `close` and `open` are bound in scope to the concern object itself. This allows for the most flexibility, since the concern has access to (1) the component object (`model`), (2) the project model (`model.project`), and (3) any other related data or logic on the concern it needs. Only using the `action` helper would scope the functions to the component itself, which would likely be unexpected when attempting to use the concern API and would lead to lack of access to pertinent data.
+
+If this binding behavior sounds familiar, this is exactly what `ember-bind-helper` does. In fact, the `concern-action` helper uses `bind` in the background. The `concern-action` helper is provided as a convenience to increase developer ergonomics out of the box.
 
 
 ### More JS API variations
@@ -113,7 +117,7 @@ A concern can be injected into any Ember object. That object is used as the conc
 ```js
 /**
   * Minimal.
-  * In this case the name of the variable can be used to look up the view model.
+  * In this case the name of the variable will be used to look up the view model.
   * In this case the `model` passed in is assumed to be `this`.
   */
 projectActions: concern()
@@ -126,7 +130,7 @@ actions: concern('project/actions')
 
 /**
   * If a variable name passed in, that variable is used as the model.
-  * In this case the `model` passed in is explicitly set to be `anyVariable`.
+  * In this case the `model` passed in is explicitly set to be the variable available with the name `anyVariable`.
   */
 actions: concern('project/actions', {
   model: 'anyVariable'
@@ -140,6 +144,14 @@ actions: concern('project/actions', {
   model: 'anyVariable'
 })
 ```
+
+#### What's up with `dependsOn`?
+
+When using the JS API, there is a computed property that is created in the background that serves as a cache for the concern object itself when it gets created. The list of properties in `dependsOn` gets added to the list of dependent keys. [See the docs](https://api.emberjs.com/ember/3.11/functions/@ember%2Fobject/computed). Just like any typical computed property, if any of the dependent keys change, the concern will be re-created.
+
+### Compatibility
+
+Supports Ember 3+
 
 ### Inspiration
 
