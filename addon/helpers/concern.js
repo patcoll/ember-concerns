@@ -12,7 +12,7 @@ export default Helper.extend({
     this.concerns = {};
   },
 
-  concern: computed('name', 'model', function() {
+  concern: computed('concerns', 'name', 'model', function() {
     let { name, model } = this;
 
     if (!this.concerns[name]) {
