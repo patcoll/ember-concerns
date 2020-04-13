@@ -68,7 +68,10 @@
   },
   "resolutions": {
     "caniuse-lite": "^1.0.0",
-    "clean-css-promise": "^3.0.0"
+    "clean-css-promise": "^3.0.0",
+    "handlebars": "^4.7.6",
+    "kind-of": "^6.0.3",
+    "minimist": "^1.2.5"
   },
   "engines": {
     "node": "10.* || >= 12"
