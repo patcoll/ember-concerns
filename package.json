@@ -68,7 +68,7 @@
     "clean-css-promise": "^3.0.0"
   },
   "engines": {
-    "node": "8.* || >= 10.*"
+    "node": ">= 10.*"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
