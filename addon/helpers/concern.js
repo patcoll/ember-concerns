@@ -1,33 +1,27 @@
-import { getOwner } from '@ember/application';
-import { computed, setProperties } from '@ember/object';
 import Helper from '@ember/component/helper';
+import { registerDisposable, runDisposables } from 'ember-lifeline';
+import { getConcernFactory, guidForConcern } from 'ember-concerns/utils';
 import { assert } from '@ember/debug';
-const { keys } = Object;
 
 export default Helper.extend({
-  init() {
-    this._super(...arguments);
-
-    this.name = null;
-    this.concerns = {};
+  concernFor({ name, model }) {
+    let factory = getConcernFactory(model, name);
+    return this.createConcern({ factory, name, model });
   },
 
-  concern: computed('concerns', 'name', 'model', function() {
-    let { name, model } = this;
+  createConcern({ factory, name, model }) {
+    let concern = factory.create({ model });
+    incrementCountFor({ name, model });
 
-    if (!this.concerns[name]) {
-      let owner = getOwner(this);
-      let factory = owner.factoryFor(`concern:${name}`);
+    registerDisposable(this, () => {
+      concern.destroy();
+      decrementCountFor({ name, model });
+    });
 
-      assert(`A concern with name '${name}' was not found`, !!factory);
+    return concern;
+  },
 
-      this.concerns[name] = factory.create({ model });
-    }
-
-    return this.concerns[name];
-  }),
-
-  compute([name, model], props) {
+  compute([name, model]) {
     assert(
       `A concern must be a string but you passed ${typeof name}`,
       typeof name === 'string'
@@ -38,24 +32,37 @@ export default Helper.extend({
       typeof model === 'object'
     );
 
-    this.name = name;
-    this.model = model;
+    let context = { name, model };
 
-    setProperties(this, { name, model });
-
-    let { concern } = this;
-
-    setProperties(concern, props);
+    let concern = this.concernFor(context);
 
     return concern;
   },
 
   willDestroy() {
-    keys(this.concerns).forEach(key => {
-      let concern = this.concerns[key];
-      if (concern && concern.destroy) {
-        concern.destroy();
-      }
-    });
-  }
+    runDisposables(this);
+  },
 });
+
+let COUNT = {};
+
+export function countFor({ name, model }) {
+  let guid = guidForConcern({ name, model });
+  return COUNT[guid] || 0;
+}
+
+function incrementCountFor({ name, model }) {
+  let guid = guidForConcern({ name, model });
+
+  if (!COUNT[guid]) {
+    COUNT[guid] = 0;
+  }
+
+  COUNT[guid]++;
+}
+
+function decrementCountFor({ name, model }) {
+  let guid = guidForConcern({ name, model });
+
+  COUNT[guid]--;
+}

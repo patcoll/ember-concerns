@@ -1,7 +1,7 @@
 # `ember-concerns`
 [![Build Status](https://travis-ci.org/patcoll/ember-concerns.svg?branch=master)](https://travis-ci.org/patcoll/ember-concerns)
 
-DRY up your Ember code without mixins.
+Wrap and extend your objects. DRY up your Ember code without mixins.
 
 Use wherever you want to have reusable view-model/presenter-like derived data in your Ember code, or wherever repeated Ember code is driving you nuts.
 
@@ -11,10 +11,7 @@ One big benefit of using Ember effectively is using *computed properties*. You c
 
 One thing I found with larger Ember apps is that sometimes the same computed properties would need to be used in multiple places, which would lead to code that is copy/pasted. In a lot of circumstances, it's appropriate to extract that code into a single place that can then be re-used.
 
-With concerns, you can encapsulate related derived data together.
-
-*It's a great way to plan a transition away from using Ember controllers.* Encapsulate the data and logic you need to abstract away from the controller into a concern, then move that to a component later by simply moving where the concern is used.
-
+With concerns, you can encapsulate related derived data together. You can also bundle related actions.
 
 ### A basic example
 
@@ -25,11 +22,12 @@ In its most basic form, a concern can act as a "view model" -- taking an object 
 import Concern from 'ember-concerns';
 import { computed } from '@ember/object';
 
-export default Concern.extend({
-  title: computed('model.{title,year}', function() {
+export default class ProjectPrettifyConcern extends Concern {
+  @computed('model.{title,year}')
+  get title() {
     let { title, year } = this.model;
     return `${title} (${year})`;
-  })
+  }
 });
 ```
 
@@ -40,7 +38,6 @@ export default Concern.extend({
 {{/with}}
 ```
 
-
 ### An advanced example
 
 In more advanced usage, a concern can offer tools to intercept and pass along user actions, acting as a sort of "presenter" with slightly more responsibility. Both the Handlebars and the JS APIs are great to use here.
@@ -49,44 +46,45 @@ In more advanced usage, a concern can offer tools to intercept and pass along us
 // app/concerns/project/actions.js
 import { inject as service } from '@ember/service';
 import Concern, { inject as concern } from 'ember-concerns';
-import { computed } from '@ember/object';
-import { alias } from '@ember/object/computed';
+import { action, computed } from '@ember/object';
 
-export default Concern.extend({
-  notifications: service(),
-
-  // In this case the model is the component itself, so create an alias to the thing we need.
-  project: alias('model.project'),
+export default class ProjectActionsConcern extends Concern {
+  @service notifications;
 
   // Re-use prettify from above using the JS API.
-  pretty: concern('project/prettify', { model: 'project' }),
+  @concern('project/prettify')
+  pretty;
 
-  closeTitle: computed('pretty.title', function() {
+  @computed('pretty.title')
+  get closeTitle() {
     let { title } = this.pretty;
     return `Close ${title}`;
-  }),
+  }
 
-  openTitle: computed('pretty.title', function() {
+  @computed('pretty.title')
+  get openTitle() {
     let { title } = this.pretty;
     return `Open ${title}`;
-  }),
+  }
 
+  @action
   close() {
     let { title } = this.pretty;
-    this.project.isClosed = true;
-    return this.project.save().then(() => {
+    this.model.project.isClosed = true;
+    return this.model.project.save().then(() => {
       this.notifications.success(`Successfully closed ${title}.`);
     });
   },
 
+  @action
   open() {
     let { title } = this.pretty;
-    this.project.isClosed = false;
-    return this.project.save().then(() => {
+    this.model.project.isClosed = false;
+    return this.model.project.save().then(() => {
       this.notifications.success(`Successfully opened ${title}.`);
     });
   }
-});
+}
 ```
 
 ```hbs
@@ -95,59 +93,40 @@ export default Concern.extend({
 
 {{!-- app/templates/components/project/action-panel.hbs --}}
 <div class="actions">
-  {{#with (concern 'project/actions' this) as |projectActions|}}
-    {{!-- `concern-action` makes sure scope for function is `projectActions` --}}
-    <button {{action (concern-action projectActions.close)}}>{{projectActions.closeTitle}}</button>
-    <button {{action (concern-action projectActions.open)}}>{{projectActions.openTitle}}</button>
+  {{#with (concern 'project/actions' this) as |actions|}}
+    <button {{on "click" actions.close}}>{{actions.closeTitle}}</button>
+    <button {{on "click" actions.open}}>{{actions.openTitle}}</button>
   {{/with}}
 </div>
 ```
 
 #### `concern-action`
 
-Concerns are designed to encapsulate related functionality. Using the `concern-action` helper, the closure actions `close` and `open` are bound in scope to the concern object itself. This allows for the most flexibility, since the concern has access to (1) the component object (`model`), (2) the project model (`model.project`), and (3) any other related data or logic on the concern it needs. Only using the `action` helper would scope the functions to the component itself, which would likely be unexpected when attempting to use the concern API and would lead to lack of access to pertinent data.
+We include the `concern-action` helper for better developer ergonomics for users of older versions of Ember. The helper implements what the `@action` decorator or `ember-bind-helper` accomplish. In fact, the `concern-action` helper uses `bind` in the background. `ember-concerns` is pre-1.0 software, so this is likely to change. We will remove this helper -- it's just a matter of when.
 
-If this binding behavior sounds familiar, this is exactly what `ember-bind-helper` does. In fact, the `concern-action` helper uses `bind` in the background. The `concern-action` helper is provided as a convenience to increase developer ergonomics out of the box.
+See [this article](https://www.pzuraq.com/ember-octane-update-action/) for a great summary of the modern take on actions in Ember.
 
+### JS API variations
 
-### More JS API variations
-
-A concern can be injected into any Ember object. That object is used as the concern's `model`, but the object doesn't have to be a model.
+A concern can be injected into any Ember object. That object is known as the concern's `model`, but the object doesn't have to be an Ember Data model. It *does* have to be an object that calls `willDestroy` when it's destroyed, so the concern can clean up after itself. (In other words, any object that inherits from `EmberObject`.)
 
 ```js
-/**
-  * Minimal.
-  * In this case the name of the variable will be used to look up the view model.
-  * In this case the `model` passed in is assumed to be `this`.
-  */
-projectActions: concern()
+// ...
+import { inject as concern } from 'ember-concerns';
 
-/**
-  * Explicitly supply path to view model.
-  * In this case the `model` passed in is assumed to be `this`.
-  */
-actions: concern('project/actions')
+export default class extends Component {
+  /**
+    * Minimal.
+    * In this case the name of the variable will be used to look up the view model.
+    */
+  @concern projectActions;
 
-/**
-  * If a variable name passed in, that variable is used as the model.
-  * In this case the `model` passed in is explicitly set to be the variable available with the name `anyVariable`.
-  */
-actions: concern('project/actions', {
-  model: 'anyVariable'
-})
-
-/**
-  * Can also explicitly set properties that the behind-the-scenes computed property depends on:
-  */
-actions: concern('project/actions', {
-  dependsOn: ['anyVariable.prop1', 'anyVariable.prop2.{subPropA,subPropB}'],
-  model: 'anyVariable'
-})
+  /**
+    * Explicitly supply path to the concern to inject.
+    */
+  @concern('project/actions') actions;
+}
 ```
-
-#### What's up with `dependsOn`?
-
-When using the JS API, there is a computed property that is created in the background that serves as a cache for the concern object itself when it gets created. The list of properties in `dependsOn` gets added to the list of dependent keys. [See the docs](https://api.emberjs.com/ember/3.11/functions/@ember%2Fobject/computed). Just like any typical computed property, if any of the dependent keys change, the concern will be re-created.
 
 ### Compatibility
 

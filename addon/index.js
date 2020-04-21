@@ -1,58 +1,74 @@
-import EmberObject, { computed, get } from '@ember/object';
-import { getOwner } from '@ember/application';
-import { copy } from '@ember/object/internals';
-import { _cleanupOnDestroy } from 'ember-concerns/utils';
-const { assign } = Object;
+/* eslint-disable ember/no-observers */
+import { computed } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { _cleanupOnDestroy, getConcernFactory } from 'ember-concerns/utils';
+import { assert } from '@ember/debug';
+import { next } from '@ember/runloop';
+import { registerDisposable, runDisposables } from 'ember-lifeline';
+import { addObserver, removeObserver } from '@ember/object/observers';
 
-export function inject(name = null, options = {}) {
-  options = assign(
-    {
-      dependsOn: [],
-      model: null
-    },
-    options
-  );
+const TRACK_PROPERTIES = false;
 
-  // If a property, add model name to list of properties to depend on.
-  if (typeof options.model === 'string') {
-    if (!options.dependsOn.includes(options.model)) {
-      options.dependsOn.push(options.model);
-    }
-  }
-
+export function inject(explicitName = null) {
   let computedProperty = {
     get(propertyName) {
-      let getName = name || propertyName;
-
-      let owner = getOwner(this);
-      let factory = owner.factoryFor(`concern:${getName}`);
-
-      if (!factory) {
-        return factory;
-      }
-
+      let name = explicitName || propertyName;
       let model = this;
-
-      if (typeof options.model === 'string') {
-        model = get(this, options.model);
-      }
+      let factory = getConcernFactory(model, name);
 
       let concern = factory.create({ model });
       return concern;
     }
   };
 
-  let computedArgs = copy(options.dependsOn);
-  computedArgs.push(computedProperty);
-
-  return computed(...computedArgs);
+  return computed(computedProperty);
 }
 
-const Concern = EmberObject.extend({
-  init({ model }) {
-    this._super(...arguments);
-    _cleanupOnDestroy(model, this, 'destroy', 'the object it lives on was destroyed or unrendered');
+class Concern {
+  // Will be used when properties need to be tracked manually.
+  // dependsOn;
+
+  @tracked model;
+
+  static create() {
+    return new this(...arguments);
   }
-});
+
+  constructor({ model }) {
+    assert('Concern needs an Ember object as model', model.willDestroy);
+
+    this.model = model;
+
+    if (TRACK_PROPERTIES) {
+      next(() => {
+        if (model.isDestroyed) {
+          return;
+        }
+
+        let properties = Array(this.dependsOn).filter(Boolean).flat();
+
+        for (let property of properties) {
+          addObserver(model, property, this, 'setModel');
+          registerDisposable(this, () => removeObserver(model, property, this, 'setModel'));
+        }
+      });
+    }
+
+    _cleanupOnDestroy(this.model, this, 'destroy', 'the object it lives on was destroyed or unrendered');
+  }
+
+  setModel() {
+    if (TRACK_PROPERTIES) {
+      /* eslint-disable-next-line no-self-assign */
+      this.model = this.model;
+    }
+  }
+
+  destroy() {
+    if (TRACK_PROPERTIES) {
+      runDisposables(this);
+    }
+  }
+}
 
 export default Concern;
