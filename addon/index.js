@@ -1,4 +1,5 @@
 import { computed } from '@ember/object';
+import { getOwner, setOwner } from '@ember/application';
 import { _cleanupOnDestroy, getConcernFactory, isElementDescriptor } from 'ember-concerns/utils';
 import { assert } from '@ember/debug';
 
@@ -35,6 +36,8 @@ class Concern {
 
   constructor({ model }) {
     assert('Concern needs an Ember object as model', model.willDestroy);
+
+    setOwner(this, getOwner(model));
 
     this.model = model;
 
