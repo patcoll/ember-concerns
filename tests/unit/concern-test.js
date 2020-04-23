@@ -94,6 +94,9 @@ module('Unit | Concern', function(hooks) {
 
       assert.ok(model.test, 'injected concern is there');
       assert.equal(model.test.prettyTitle, 'HELLO', 'concern works');
+
+      assert.ok(model.test.test, 'injected service on concern is there');
+      assert.ok(model.test.test.key, 'value', 'can do basic operation on injected service on concern');
     });
 
     test('works with Ember object class', function(assert) {
@@ -105,6 +108,9 @@ module('Unit | Concern', function(hooks) {
 
       assert.ok(model.test, 'injected concern is there');
       assert.equal(model.test.prettyTitle, 'HELLO', 'concern works');
+
+      assert.ok(model.test.test, 'injected service on concern is there');
+      assert.ok(model.test.test.key, 'value', 'can do basic operation on injected service on concern');
     });
   });
 });
