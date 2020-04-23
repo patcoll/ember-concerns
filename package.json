@@ -1,7 +1,7 @@
 {
   "name": "ember-concerns",
   "description": "DRY up your Ember code without mixins",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "author": {
     "name": "Pat Collins <pat@burned.com>"
