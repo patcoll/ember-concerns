@@ -39,7 +39,7 @@ export function _cleanupOnDestroy(owner, object, cleanupMethodName, ...args) {
 }
 
 export function getConcernFactory(parent, name) {
-  let owner = getOwner(parent);
+  let owner = getOwner(parent) || parent.container;
   assert('An owner is necessary to create a concern instance', owner);
 
   let factory = owner.factoryFor(`concern:${name}`);
@@ -57,3 +57,16 @@ export function getPropertyNames(model) {
 
   return keys(model);
 }
+
+// Taken from `@ember/-internals/metal`.
+export function isElementDescriptor(args) {
+  let [maybeTarget, maybeKey, maybeDesc] = args;
+  return (// Ensure we have the right number of args
+    args.length === 3 && ( // Make sure the target is a class or object (prototype)
+    typeof maybeTarget === 'function' || typeof maybeTarget === 'object' && maybeTarget !== null) && // Make sure the key is a string
+    typeof maybeKey === 'string' && ( // Make sure the descriptor is the right shape
+    typeof maybeDesc === 'object' && maybeDesc !== null && 'enumerable' in maybeDesc && 'configurable' in maybeDesc || // TS compatibility
+    maybeDesc === undefined)
+  );
+}
+
