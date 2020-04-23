@@ -15,8 +15,6 @@ With concerns, you can encapsulate that related derived data together, and even 
 
 ## Examples
 
-Some examples should illustrate how best to use concerns.
-
 We will show examples using classes, but using concerns using the `Object.extend({})` syntax is perfectly valid too.
 
 ### A basic example
