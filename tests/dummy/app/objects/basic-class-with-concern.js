@@ -3,10 +3,10 @@ import { inject as concern } from 'ember-concerns';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-export default EmberObject.extend({
-  title: tracked(),
+export default class BasicWithConcernObject extends EmberObject {
+  @tracked title;
 
-  test: concern(),
+  @concern test;
 
-  store: service(),
-});
+  @service store;
+}

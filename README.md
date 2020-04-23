@@ -1,21 +1,27 @@
 # `ember-concerns`
 [![Build Status](https://travis-ci.org/patcoll/ember-concerns.svg?branch=master)](https://travis-ci.org/patcoll/ember-concerns)
 
-Wrap and extend your objects. DRY up your Ember code without mixins.
+Wrap and extend your Ember objects. DRY up your Ember code without mixins.
 
-Use wherever you want to have reusable view-model/presenter-like derived data in your Ember code, or wherever repeated Ember code is driving you nuts.
+A concern can be used with any Ember object. Use wherever you want to have reusable view-model/presenter-like derived data in your Ember code, or wherever repeated Ember code is driving you nuts.
 
-### Description
+## Description
 
-One big benefit of using Ember effectively is using *computed properties*. You can compute, aggregate, or mix-and-match data from multiple sources and keep them in sync.
+One big benefit of using Ember effectively is using *derived data*. Using tools like computed properties and autotracking, you can compute, aggregate, or mix-and-match data from multiple sources and keep them in sync.
 
-One thing I found with larger Ember apps is that sometimes the same computed properties would need to be used in multiple places, which would lead to code that is copy/pasted. In a lot of circumstances, it's appropriate to extract that code into a single place that can then be re-used.
+One thing I found with larger Ember apps is that the same derived data would sometimes need to be used in multiple places, which would lead to a bunch of code that is copy/pasted. This can get pretty frustrating. In a lot of circumstances, it's appropriate to extract that shared code into a single place that can then be re-used.
 
-With concerns, you can encapsulate related derived data together. You can also bundle related actions.
+With concerns, you can encapsulate that related derived data together, and even bundle related actions with it if you need to.
+
+## Examples
+
+We will show examples using classes, but using concerns using the `Object.extend({})` syntax is perfectly valid too.
 
 ### A basic example
 
-In its most basic form, a concern can act as a "view model" -- taking an object as input and extending it with computed properties that are appropriate for rendering a view. Think components that need to access the same derived data. If multiple components share the need for the same data, that concern can simply be used in multiple components. If you feel that data is more appropriate closer to the model layer, the concern can be moved to the model itself. In this scenario, the Ember Handlebars API makes this nice and decoupled.
+In its most basic form, a concern can act as a "view model" -- taking an object as input and extending it with derived data appropriate for rendering. If multiple components share the need for the same data, that concern can simply be used in multiple components. In this scenario, the Ember Handlebars API makes this nice and decoupled.
+
+A concern can extend any Ember object. That object is known as the concern's `model`, but the object doesn't have to be an Ember Data model.
 
 ```js
 // app/concerns/project/prettify.js
@@ -38,9 +44,9 @@ export default class ProjectPrettifyConcern extends Concern {
 {{/with}}
 ```
 
-### An advanced example
+### A more complex example
 
-In more advanced usage, a concern can offer tools to intercept and pass along user actions, acting as a sort of "presenter" with slightly more responsibility. Both the Handlebars and the JS APIs are great to use here.
+In more advanced usage, a concern can offer tools to intercept and pass along user actions, which gives it slightly more responsibility. Both the Handlebars and the JS APIs are great to use here.
 
 ```js
 // app/concerns/project/actions.js
@@ -100,15 +106,18 @@ export default class ProjectActionsConcern extends Concern {
 </div>
 ```
 
-#### `concern-action`
+## A note on computed properties and autotracking
 
-We include the `concern-action` helper for better developer ergonomics for users of older versions of Ember. The helper implements what the `@action` decorator or `ember-bind-helper` accomplish. In fact, the `concern-action` helper uses `bind` in the background. `ember-concerns` is pre-1.0 software, so this is likely to change. We will remove this helper -- it's just a matter of when.
+Concerns track and use the same features that Ember itself uses. One of those features is called [*autotracking*](https://guides.emberjs.com/release/in-depth-topics/autotracking-in-depth/), and it's already in recent versions of Ember, back to version 3.13.0.
 
-See [this article](https://www.pzuraq.com/ember-octane-update-action/) for a great summary of the modern take on actions in Ember.
+There is a long story behind autotracking and why it exists. Read [this post](https://www.pzuraq.com/how-autotracking-works/) for a great comprehensive story on the design behind the feature and how it fulfills important principles for good reactive systems.
 
-### JS API variations
+Concerns can take advantage of autotracking in the same way the objects in your app can. That is, you can:
 
-A concern can be injected into any Ember object. That object is known as the concern's `model`, but the object doesn't have to be an Ember Data model. It *does* have to be an object that calls `willDestroy` when it's destroyed, so the concern can clean up after itself. (In other words, any object that inherits from `EmberObject`.)
+1. Wrap native class getters in concerns with the `@computed` decorator if you want it to act like a traditional Ember computed property, or
+2. Add `@tracked` to all properties you care about tracking, and remove `@computed` from the native getter
+
+## JS API variations
 
 ```js
 // ...
@@ -128,11 +137,19 @@ export default class extends Component {
 }
 ```
 
-### Compatibility
+## `concern-action`
 
-Supports Ember 3+
+We include the `concern-action` helper for better developer ergonomics for users of older versions of Ember. The helper implements what the `@action` decorator or `ember-bind-helper` accomplish. In fact, the `concern-action` helper uses `bind` in the background.
 
-### Inspiration
+We will likely remove this helper when Ember LTS 3.12 becomes unsupported.
+
+See [this article](https://www.pzuraq.com/ember-octane-update-action/) for a great summary of the modern take on actions in Ember.
+
+## Compatibility
+
+Supports Ember 3.12+
+
+## Inspiration
 
 - https://api.rubyonrails.org/classes/ActiveSupport/Concern.html
 - https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html
