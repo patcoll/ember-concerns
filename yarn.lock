@@ -2648,10 +2648,10 @@ babel-plugin-htmlbars-inline-precompile@^1.0.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-1.0.0.tgz#a9d2f6eaad8a3f3d361602de593a8cbef8179c22"
   integrity sha512-4jvKEHR1bAX03hBDZ94IXsYCj3bwk9vYsn6ux6JZNL2U5pvzCWjqyrGahfsGNrhERyxw8IqcirOi9Q6WCo3dkQ==
 
-babel-plugin-htmlbars-inline-precompile@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-3.0.1.tgz#e1e38a4087f446578e419a21c112530c8df02345"
-  integrity sha512-ZiFY0nQjtdMPGIDwp/5LYOs6rCr54QfcSV5nPbrA7C++Fv4Vb2Q/qrKYx78t+dwmARJztnOBlObFk4z8veHxNA==
+babel-plugin-htmlbars-inline-precompile@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-4.1.0.tgz#11796422e65d900a968481fa3fb37e0425c928dd"
+  integrity sha512-gM+UP6HO5RlGiOQzJVGRUHgAsefJeOdh5Pn+rZRS6Tr1MnEqVgTJ2G2ywnl+G+Zcuec18fz7XA+O2tHhsmct6w==
 
 babel-plugin-module-resolver@^3.1.1:
   version "3.2.0"
@@ -4960,7 +4960,7 @@ ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.16.0, ember-cli-babel@^6.6.0, 
     ember-cli-version-checker "^2.1.2"
     semver "^5.5.0"
 
-ember-cli-babel@^7.1.2, ember-cli-babel@^7.1.3, ember-cli-babel@^7.11.0, ember-cli-babel@^7.12.0, ember-cli-babel@^7.18.0, ember-cli-babel@^7.5.0, ember-cli-babel@^7.7.3:
+ember-cli-babel@^7.1.2, ember-cli-babel@^7.11.0, ember-cli-babel@^7.12.0, ember-cli-babel@^7.18.0, ember-cli-babel@^7.19.0, ember-cli-babel@^7.5.0, ember-cli-babel@^7.7.3:
   version "7.19.0"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.19.0.tgz#e6eddea18a867231fcf90a80689e92b98be9a63b"
   integrity sha512-HiWKuoyy35vGEr+iCw6gUnQ3pS5qslyTlKEDW8cVoMbvZNGYBgRxHed5nklVUh+BS74AwR9lsp25BTAagYAP9Q==
@@ -5020,12 +5020,12 @@ ember-cli-htmlbars-inline-precompile@^2.1.0:
     silent-error "^1.1.0"
 
 ember-cli-htmlbars@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/ember-cli-htmlbars/-/ember-cli-htmlbars-5.0.0.tgz#ba5469d3f3412e154b01c4d8b9fbc1d6f7dc7af1"
-  integrity sha512-K1bPl1X3eermPcZMThzRXHmGCfk1+GGceHhLar5b3NPZy55DKlUsuQOjsWKQ0vHG/c5aR3G40i3Drt1DdnIoSA==
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/ember-cli-htmlbars/-/ember-cli-htmlbars-5.1.2.tgz#b07cdb6b870bb223605dbed915c9c8d5185c53bb"
+  integrity sha512-//TZ3g0YYsSXylK4RhaFDDr694YOnjrO884+vzNteirYDLB9Yk0SnERlFC2qH6UKZ8koSZtdiXeEtltEqv5wew==
   dependencies:
     "@ember/edition-utils" "^1.2.0"
-    babel-plugin-htmlbars-inline-precompile "^3.0.1"
+    babel-plugin-htmlbars-inline-precompile "^4.1.0"
     broccoli-debug "^0.6.5"
     broccoli-persistent-filter "^2.3.1"
     broccoli-plugin "^4.0.3"
@@ -5123,7 +5123,7 @@ ember-cli-typescript@3.0.0:
     stagehand "^1.0.0"
     walk-sync "^2.0.0"
 
-ember-cli-typescript@^2.0.0, ember-cli-typescript@^2.0.2:
+ember-cli-typescript@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/ember-cli-typescript/-/ember-cli-typescript-2.0.2.tgz#464984131fbdc05655eb61d1c3cdd911d3137f0d"
   integrity sha512-7I5azCTxOgRDN8aSSnJZIKSqr+MGnT+jLTUbBYqF8wu6ojs2DUnTePxUcQMcvNh3Q3B1ySv7Q/uZFSjdU9gSjA==
@@ -5344,12 +5344,12 @@ ember-inflector@^3.0.1:
     ember-cli-babel "^6.6.0"
 
 ember-lifeline@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/ember-lifeline/-/ember-lifeline-5.0.0.tgz#65326245e62268ec8c8bda4f351f4108e2324455"
-  integrity sha512-SClDe/sNnVzQ4Rj2dm6GnTKpNMvtAGVztU+KSlDUEk+V8+455rPC+ewnxRdqvelYHFt+ACqfbGHj5ogaiJdh9A==
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/ember-lifeline/-/ember-lifeline-5.1.0.tgz#6b7bcde7912333551e0d0643908c2b8511e586a9"
+  integrity sha512-gmGHqroVQ19Z7KLha33hBg/2QNxamsbKRdpJiC46iKirk31KHInS4D3scl6iwMZXWBjHO+5VyTNmPTNww9AGOQ==
   dependencies:
-    ember-cli-babel "^7.1.3"
-    ember-cli-typescript "^2.0.0"
+    ember-cli-babel "^7.19.0"
+    ember-cli-typescript "^3.1.3"
 
 ember-load-initializers@^2.1.1:
   version "2.1.1"
@@ -5713,9 +5713,9 @@ escodegen@^1.11.0:
     source-map "~0.6.1"
 
 eslint-plugin-ember@^8.2.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-ember/-/eslint-plugin-ember-8.4.0.tgz#bf66c1abf76b1039c8c253bf755b06382dd5c2b9"
-  integrity sha512-jzSpyA3+aQrEHydo3Tz8cNAbgmtYVlp0eSe8X52OsHYLdVc7i4vzMwA+ptfO06dzpLQNHWW5ziprB5hoAEt95A==
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-ember/-/eslint-plugin-ember-8.5.0.tgz#08660485edcf78c716b7db7c0834c970d06a3dc1"
+  integrity sha512-tj8GQbm5XknbUDp4FrwMLGBprxqzoi9JAszXyCwMPJQBipinHyyAxIRbu57/ENJVyeGRmQTme1WM4PJuMh3kFQ==
   dependencies:
     "@ember-data/rfc395-data" "^0.0.4"
     ember-rfc176-data "^0.3.12"
