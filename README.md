@@ -1,5 +1,6 @@
 # `ember-concerns`
 [![Build Status](https://travis-ci.org/patcoll/ember-concerns.svg?branch=master)](https://travis-ci.org/patcoll/ember-concerns)
+[![Ember Observer Score](https://emberobserver.com/badges/ember-concerns.svg)](https://emberobserver.com/addons/ember-concerns)
 
 Wrap and extend your Ember objects. DRY up your Ember code without mixins.
 
