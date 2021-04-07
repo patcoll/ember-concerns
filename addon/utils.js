@@ -14,8 +14,7 @@ export function guidForConcern({ name, model }) {
 export function _cleanupOnDestroy(owner, object, cleanupMethodName, ...args) {
   // TODO: find a non-mutate-y, non-hacky way of doing this.
 
-  if (!owner.willDestroy)
-  {
+  if (!owner.willDestroy) {
     // we're running in non Ember object (possibly in a test mock)
     return;
   }
@@ -24,8 +23,8 @@ export function _cleanupOnDestroy(owner, object, cleanupMethodName, ...args) {
     let oldWillDestroy = owner.willDestroy;
     let disposers = [];
 
-    owner.willDestroy = function() {
-      for (let i = 0, l = disposers.length; i < l; i ++) {
+    owner.willDestroy = function () {
+      for (let i = 0, l = disposers.length; i < l; i++) {
         disposers[i]();
       }
       oldWillDestroy.apply(owner, arguments);
@@ -51,7 +50,7 @@ export function getConcernFactory(parent, name) {
 export function getPropertyNames(model) {
   if (typeOf(model.eachAttribute) === 'function') {
     let keys = [];
-    model.eachAttribute(key => keys.push(key));
+    model.eachAttribute((key) => keys.push(key));
     return keys;
   }
 
@@ -61,12 +60,16 @@ export function getPropertyNames(model) {
 // Taken from `@ember/-internals/metal`.
 export function isElementDescriptor(args) {
   let [maybeTarget, maybeKey, maybeDesc] = args;
-  return (// Ensure we have the right number of args
-    args.length === 3 && ( // Make sure the target is a class or object (prototype)
-    typeof maybeTarget === 'function' || typeof maybeTarget === 'object' && maybeTarget !== null) && // Make sure the key is a string
-    typeof maybeKey === 'string' && ( // Make sure the descriptor is the right shape
-    typeof maybeDesc === 'object' && maybeDesc !== null && 'enumerable' in maybeDesc && 'configurable' in maybeDesc || // TS compatibility
-    maybeDesc === undefined)
+  return (
+    // Ensure we have the right number of args
+    args.length === 3 && // Make sure the target is a class or object (prototype)
+    (typeof maybeTarget === 'function' ||
+      (typeof maybeTarget === 'object' && maybeTarget !== null)) && // Make sure the key is a string
+    typeof maybeKey === 'string' && // Make sure the descriptor is the right shape
+    ((typeof maybeDesc === 'object' &&
+      maybeDesc !== null &&
+      'enumerable' in maybeDesc &&
+      'configurable' in maybeDesc) || // TS compatibility
+      maybeDesc === undefined)
   );
 }
-

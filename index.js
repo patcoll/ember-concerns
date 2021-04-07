@@ -10,11 +10,11 @@ module.exports = {
       plugin: require('./lib/concern-action-transform'),
       baseDir() {
         return __dirname;
-      }
+      },
     });
   },
 
   isDevelopingAddon() {
     return true;
-  }
+  },
 };

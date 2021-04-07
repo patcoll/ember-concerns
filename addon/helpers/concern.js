@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes */
 import Helper from '@ember/component/helper';
 import { registerDisposable, runDisposables } from 'ember-lifeline';
 import { getConcernFactory, guidForConcern } from 'ember-concerns/utils';

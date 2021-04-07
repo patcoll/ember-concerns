@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes */
 import EmberObject from '@ember/object';
 import { inject as concern } from 'ember-concerns';
 import { inject as service } from '@ember/service';
