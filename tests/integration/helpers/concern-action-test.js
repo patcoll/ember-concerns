@@ -3,13 +3,11 @@ import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 
-module('Integration | Helpers | concern-action', function(hooks) {
+module('Integration | Helpers | concern-action', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it provides correct context', async function(assert) {
-    let model = this.owner
-      .factoryFor('object:key-value')
-      .create();
+  test('it provides correct context', async function (assert) {
+    let model = this.owner.factoryFor('object:key-value').create();
 
     this.set('model', model);
 
@@ -31,20 +29,14 @@ module('Integration | Helpers | concern-action', function(hooks) {
         ></button>
       `);
 
-    assert
-      .dom('[data-test-value]')
-      .hasText('original value');
+    assert.dom('[data-test-value]').hasText('original value');
 
     await click('[data-test-action]');
 
-    assert
-      .dom('[data-test-value]')
-      .hasText('new value');
+    assert.dom('[data-test-value]').hasText('new value');
 
     await click('[data-test-newer-action]');
 
-    assert
-      .dom('[data-test-value]')
-      .hasText('newer value');
+    assert.dom('[data-test-value]').hasText('newer value');
   });
 });

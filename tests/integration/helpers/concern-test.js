@@ -4,15 +4,13 @@ import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 import { countFor } from 'ember-concerns/helpers/concern';
 
-module('Integration | Helpers | concern', function(hooks) {
+module('Integration | Helpers | concern', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('basic concern helper usage works as expected', async function(assert) {
-    let model = this.owner
-      .factoryFor('object:basic-class')
-      .create({
-        title: 'hello there',
-      });
+  test('basic concern helper usage works as expected', async function (assert) {
+    let model = this.owner.factoryFor('object:basic-class').create({
+      title: 'hello there',
+    });
 
     this.set('model', model);
 
@@ -22,31 +20,23 @@ module('Integration | Helpers | concern', function(hooks) {
         {{/with}}
       `);
 
-    assert
-      .dom('[data-test-pretty-title]')
-      .hasText('HELLO THERE');
+    assert.dom('[data-test-pretty-title]').hasText('HELLO THERE');
 
     model.set('title', 'hi there');
     await settled();
 
-    assert
-      .dom('[data-test-pretty-title]')
-      .hasText('HI THERE');
+    assert.dom('[data-test-pretty-title]').hasText('HI THERE');
 
     model.set('title', 'hi again');
     await settled();
 
-    assert
-      .dom('[data-test-pretty-title]')
-      .hasText('HI AGAIN');
+    assert.dom('[data-test-pretty-title]').hasText('HI AGAIN');
   });
 
-  test('concern helper cleans up after itself if template is destroyed', async function(assert) {
-    let model = this.owner
-      .factoryFor('object:basic')
-      .create({
-        title: 'hello there',
-      });
+  test('concern helper cleans up after itself if template is destroyed', async function (assert) {
+    let model = this.owner.factoryFor('object:basic').create({
+      title: 'hello there',
+    });
 
     this.set('show', true);
     this.set('model', model);

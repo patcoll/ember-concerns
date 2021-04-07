@@ -1,6 +1,11 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes */
 import { computed } from '@ember/object';
 import { getOwner, setOwner } from '@ember/application';
-import { _cleanupOnDestroy, getConcernFactory, isElementDescriptor } from 'ember-concerns/utils';
+import {
+  _cleanupOnDestroy,
+  getConcernFactory,
+  isElementDescriptor,
+} from 'ember-concerns/utils';
 import { assert } from '@ember/debug';
 
 export function inject(...args) {
@@ -15,7 +20,7 @@ export function inject(...args) {
 
       let concern = factory.create({ model });
       return concern;
-    }
+    },
   };
 
   let decorator = computed(computedProperty);
@@ -41,7 +46,12 @@ class Concern {
 
     this.model = model;
 
-    _cleanupOnDestroy(this.model, this, 'destroy', 'the object it lives on was destroyed or unrendered');
+    _cleanupOnDestroy(
+      this.model,
+      this,
+      'destroy',
+      'the object it lives on was destroyed or unrendered'
+    );
   }
 
   destroy() {}

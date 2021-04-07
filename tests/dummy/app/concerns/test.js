@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes */
 import Concern from 'ember-concerns';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
@@ -26,4 +27,4 @@ if (semver.gte(VERSION, '3.13.0')) {
   klass = TestNewStyleConcern;
 }
 
-export default klass
+export default klass;
